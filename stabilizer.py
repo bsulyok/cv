@@ -26,7 +26,7 @@ while src.isOpened():
     cur_corner, status, err = cv2.calcOpticalFlowPyrLK(prev_gray, cur_gray, prev_corner, cur_corner)
     prev_corner2 = prev_corner[np.where(status == 1)[0]]
     cur_corner2 = cur_corner[np.where(status == 1)[0]]
-    trans, ret2 = cv2.estimateAffinePartial2D(prev_corner2, cur_corner2,)
+    trans, ret2 = cv2.estimateAffinePartial2D(prev_corner2, cur_corner2)
     if trans is None:
         trans = last_trans
     last_trans = trans
@@ -55,8 +55,8 @@ smooth_trajectory_out.close()
 smooth_transform_out = open("smooth_trans.txt", "w")
 trans_sum = [0, 0, 0]
 for trans in range(len(rough_transform)):
-    #trans_d = [x + y - z for x, y, z in zip(rough_transform[trans], smooth_trajectory[trans], rough_trajectory[trans])]
-    trans_d = [x -   y for x, y in zip(smooth_trajectory[trans], rough_trajectory[trans])]
+    trans_d = [x + y - z for x, y, z in zip(rough_transform[trans], smooth_trajectory[trans], rough_trajectory[trans])]
+    #trans_d = [x - y for x, y in zip(smooth_trajectory[trans], rough_trajectory[trans])]
     smooth_transform.append(trans_d)
     smooth_transform_out.write("{};{};{}\n".format(trans_d[0], trans_d[1], trans_d[2]))
 smooth_transform_out.close()
@@ -73,7 +73,6 @@ for trans in smooth_transform:
         break
     cur = cv2.warpAffine(cur, np.array([[math.cos(trans[2]), -math.sin(trans[2]), trans[0]*(1-rotonly)], [math.sin(trans[2]), math.cos(trans[2]), trans[1]*(1-rotonly)]]), (int(horiz), int(vert)))
     out.write(cur)
-
 out.release()
 src.release()
 

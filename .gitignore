@@ -1,2 +1,9 @@
 data/*
 .pylintrc
+*.txt
+*.mkv
+*.mp4
+*.avi
+*.flv
+*.jpg
+*.png
