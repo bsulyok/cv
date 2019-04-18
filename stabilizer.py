@@ -16,7 +16,7 @@ frame_size = (int(horiz), int(vert))
 
 ret, prev = src.read()
 prev_gray = cv2.cvtColor(prev, cv2.COLOR_BGR2GRAY)
-prev_features = cv2.goodFeaturesToTrack(prev_gray, feature_num, feature_quality, feature_distance)
+prev_features = cv2.goodFeaturesToTrack(1, feature_num, feature_quality, feature_distance)
 last_transform, trajectory = [], []
 a, x, y = 0, 0, 0
 for i in tqdm(range(frame_num)):
